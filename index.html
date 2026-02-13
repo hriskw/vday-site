@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be my Valentine?</title>
+    <style>
+        /* --- CSS: DESIGN --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Videoclipul de fundal */
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+            transition: opacity 1s ease;
+        }
+
+        /* Containerul central */
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            max-width: 90%;
+            width: 350px;
+        }
+
+        /* AICI AM MODIFICAT DIMENSIUNEA IMAGINII */
+        .main-image {
+            width: 280px; /* Am crescut de la 150px la 280px */
+            max-width: 100%; /* Asigură că nu iese din chenar pe telefoane mici */
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+        
+        #yesBtn:hover { transform: scale(1.1); }
+
+        #noBtn {
+            background-color: #dc3545;
+            color: white;
+            font-weight: bold;
+            position: static; 
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 20px; width: 85%; }
+            button { padding: 10px 20px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline id="background-video">
+        <source id="video-source" src="video_start.mp4" type="video/mp4">
+        Browserul tău nu suportă video HTML5.
+    </video>
+
+    <div class="container">
+        <img id="mainImage" src="poza_start.jpg" alt="Valentine Image" class="main-image">
+        
+        <h1 id="questionText">Be my Valentine?</h1>
+        
+        <div class="buttons" id="btnContainer">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT ---
+
+        // AICI setezi numele fisierelor pentru FINAL (dupa ce apasa YES)
+        // Asigura-te ca fisierele sunt in folder!
+        const videoDeFinal = "video_final.mp4"; 
+        const imagineDeFinal = "poza_final.jpg"; 
+
+        // Selectăm elementele
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const videoElement = document.getElementById('background-video');
+        const videoSource = document.getElementById('video-source'); 
+        const questionText = document.getElementById('questionText');
+        const mainImage = document.getElementById('mainImage');
+        const btnContainer = document.getElementById('btnContainer');
+
+        // --- FUNCȚIA PENTRU BUTONUL "NO" ---
+        function moveButton() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            const randomX = Math.random() * (windowWidth - btnWidth);
+            const randomY = Math.random() * (windowHeight - btnHeight);
+
+            noBtn.style.position = 'fixed'; 
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            moveButton();
+        });
+        noBtn.addEventListener('click', (e) => {
+             e.preventDefault();
+             moveButton();
+        });
+
+
+        // --- FUNCȚIA PENTRU BUTONUL "YES" ---
+        yesBtn.addEventListener('click', () => {
+            
+            // 1. Schimbăm sursa video-ului
+            videoElement.pause(); // Oprim video-ul curent
+            videoSource.setAttribute('src', videoDeFinal); // Setam noua sursa
+            videoElement.load(); // Incarcam noul video
+            videoElement.play(); // Pornim
+
+            // 2. Schimbăm textul și imaginea
+            questionText.innerText = "Te iubesc iubbbb, stiam eu ❤️❤️❤️";
+            mainImage.src = imagineDeFinal;
+
+            // 3. Ascundem butoanele
+            btnContainer.style.display = 'none';
+        });
+
+    </script>
+</body>
+</html>
